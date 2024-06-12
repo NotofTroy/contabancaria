@@ -1,11 +1,21 @@
-package conta;
+package account;
 
 import java.util.Scanner;
-import conta.util.Colors;
+
+import account.model.Account;
+import account.util.Colors;
 
 public class Menu {
 
 	public static void main(String[] args) {
+		
+				Account account1 = new Account(1, 123, 1, "Adriana", 10000.0f);
+				account1.view();
+				account1.withdraw(12000.0f);
+				account1.view();
+				account1.deposit(5000.0f);
+				account1.view();
+
 		
 		Scanner input = new Scanner(System.in);
 		
