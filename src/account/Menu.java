@@ -1,25 +1,44 @@
 package account;
 
 import java.util.Scanner;
+import account.util.Colors;
 
 import account.model.Account;
-import account.util.Colors;
+import account.model.CheckingAccount;
+import account.model.SavingsAccount;
+
 
 public class Menu {
 
 	public static void main(String[] args) {
 		
-				Account account1 = new Account(1, 123, 1, "Adriana", 10000.0f);
-				account1.view();
-				account1.withdraw(12000.0f);
-				account1.view();
-				account1.deposit(5000.0f);
-				account1.view();
-
-		
 		Scanner input = new Scanner(System.in);
-		
 		int option;
+		
+		//Account class test
+		Account account1 = new Account(1, 123, 1, "Adriana", 10000.0f);
+		account1.view();
+		account1.withdraw(12000.0f);
+		account1.view();
+		account1.deposit(5000.0f);
+		account1.view();
+		
+		//CheckingAccount class test
+		CheckingAccount checkingAccount1 = new CheckingAccount(2, 123, 1, "Mariana", 15000.0f, 1000.0f);
+		checkingAccount1.view();
+		checkingAccount1.withdraw(12000.0f);
+		checkingAccount1.view();
+		checkingAccount1.deposit(5000.0f);
+		checkingAccount1.view();
+		
+		//SavingsAccount class test
+		SavingsAccount savingsAccount1 = new SavingsAccount(3, 123, 2, "Victor", 100000.0f, 15);
+		savingsAccount1.view();
+		savingsAccount1.withdraw(1000.0f);
+		savingsAccount1.view();
+		savingsAccount1.deposit(5000.0f);
+		savingsAccount1.view();
+
 		
 		while (true) {
 			System.out.println(Colors.TEXT_YELLOW + Colors.ANSI_BLACK_BACKGROUND
