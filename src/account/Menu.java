@@ -15,14 +15,6 @@ public class Menu {
 		Scanner input = new Scanner(System.in);
 		int option;
 		
-		//Account class test
-		Account account1 = new Account(1, 123, 1, "Adriana", 10000.0f);
-		account1.view();
-		account1.withdraw(12000.0f);
-		account1.view();
-		account1.deposit(5000.0f);
-		account1.view();
-		
 		//CheckingAccount class test
 		CheckingAccount checkingAccount1 = new CheckingAccount(2, 123, 1, "Mariana", 15000.0f, 1000.0f);
 		checkingAccount1.view();
