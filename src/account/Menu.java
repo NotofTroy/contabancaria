@@ -1,9 +1,10 @@
 package account;
 
+import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import account.util.Colors;
 
-import account.model.Account;
 import account.model.CheckingAccount;
 import account.model.SavingsAccount;
 
@@ -53,50 +54,87 @@ public class Menu {
 			System.out.println("*****************************************************");
 			System.out.println("Entre com a opção desejada:                          ");
 			System.out.println("                                                     " + Colors.TEXT_RESET);
-
-			option = input.nextInt();
+		
+			
+			try {
+				option = input.nextInt();
+				
+			} catch(InputMismatchException e) {
+				
+				System.out.println(Colors.TEXT_RED_BOLD + "\nDigite números inteiros!\n" + Colors.TEXT_RESET);
+				input.nextLine();
+				
+				// in the cookbook, there was no call for keyPress() or continue, 
+				// it just assigned 0 to option (option = 0).
+				// I chose to call keyPress() and continue to the next iteration of while,
+				// to avoid the processing of the switch case and its triggering of default.
+				keyPress();
+				continue;
+				
+			}
+			
 			
 			switch (option) {
 			case 1:
-				System.out.println(Colors.TEXT_WHITE + "Criar Conta\n\n");
-			
-                		break;
+				System.out.println(Colors.TEXT_WHITE + "\nCriar Conta");
+				
+				keyPress();
+				break;
+				
 			case 2:
-				System.out.println(Colors.TEXT_WHITE + "Listar todas as Contas\n\n");
+				System.out.println(Colors.TEXT_WHITE + "\nListar todas as Contas");
 				
-                		break;
+				keyPress();
+                break;
+                
 			case 3:
-				System.out.println(Colors.TEXT_WHITE + "Consultar dados da Conta - por número\n\n");
-
-                		break;
+				System.out.println(Colors.TEXT_WHITE + "\nConsultar dados da Conta - por número");
+				
+				keyPress();
+                break;
+                
 			case 4:
-				System.out.println(Colors.TEXT_WHITE + "Atualizar dados da Conta\n\n");
+				System.out.println(Colors.TEXT_WHITE + "\nAtualizar dados da Conta");
 				
-                		break;
+				keyPress();
+                break;
+                
 			case 5:
-				System.out.println(Colors.TEXT_WHITE + "Apagar a Conta\n\n");
-	
-               	 	break;
-			case 6:
-				System.out.println(Colors.TEXT_WHITE + "Saque\n\n");
-
-               	 	break;
-			case 7:
-				System.out.println(Colors.TEXT_WHITE + "Depósito\n\n");
+				System.out.println(Colors.TEXT_WHITE + "\nApagar a Conta");
 				
-                		break;
+				keyPress();
+               	break;
+               	
+			case 6:
+				System.out.println(Colors.TEXT_WHITE + "\nSaque");
+				
+				keyPress();
+               	break;
+               	
+			case 7:
+				System.out.println(Colors.TEXT_WHITE + "\nDepósito");
+				
+				keyPress();
+                break;
+                
 			case 8:
-				System.out.println(Colors.TEXT_WHITE + "Transferência entre Contas\n\n");
+				System.out.println(Colors.TEXT_WHITE + "\nTransferência entre Contas");
+				
+				keyPress();
+				break;
 				
 			case 9:
 				System.out.println(Colors.TEXT_WHITE_BOLD + "\nBanco do Brazil com Z - O seu Futuro começa aqui!");
 				about();
 				input.close();
 				System.exit(0);
+				
 				break;
 				
 			default:
 				System.out.println(Colors.TEXT_RED_BOLD + "\nOpção Inválida!\n" + Colors.TEXT_RESET);
+				
+				keyPress();
 				break;
 			}
 		}
@@ -104,10 +142,25 @@ public class Menu {
 	
 	
 	public static void about() {
+		
 		System.out.println("\n*********************************************************");
 		System.out.println("Projeto Desenvolvido por: ");
 		System.out.println("Helena Cristina Souto Fonseca - helenacsfonseca@hotmail.com");
 		System.out.println("https://github.com/NotofTroy");
 		System.out.println("*********************************************************");
+	}
+	
+	
+	public static void keyPress() {
+
+		try {
+
+			System.out.println(Colors.TEXT_RESET + "\nPressione Enter para Continuar.");
+			System.in.read();
+
+		} catch (IOException e) {
+
+			System.out.println(Colors.TEXT_RED_BOLD + "\nPressione somente enter" + Colors.TEXT_RESET);
+		}
 	}
 }
