@@ -129,18 +129,70 @@ public class Menu {
 			case 3:
 				System.out.println(Colors.TEXT_WHITE + "\nConsultar dados da Conta - por número");
 				
+				System.out.println(Colors.TEXT_WHITE + "\nInsira o número da conta que deseja visualizar.");
+				number = input.nextInt();
+				accounts.searchByNumber(number);
+				
 				keyPress();
                 break;
                 
 			case 4:
 				System.out.println(Colors.TEXT_WHITE + "\nAtualizar dados da Conta");
+				System.out.println(Colors.TEXT_WHITE + "\nInsira o número da conta que deseja atualizar.");
+				number = input.nextInt();
+				
+				var searchAccount = accounts.searchCollection(number);
+				
+				if (searchAccount != null) {
+					
+					type = searchAccount.getType();
+					
+					System.out.println(Colors.TEXT_WHITE + "\nInsira o novo número da agência.");
+					branch = input.nextInt();
+					
+					System.out.println(Colors.TEXT_WHITE + "\nInsira o novo nome do titular.");
+					input.skip("\\R?");
+					accountHolder = input.nextLine();
+					
+					System.out.println(Colors.TEXT_WHITE + "\nInsira o novo saldo da conta.");
+					balance = input.nextFloat();
+					
+					switch (type) {
+					
+						case 1 -> {
+							System.out.println(Colors.TEXT_WHITE + "\nInsira o novo limite de crédito.");
+							limit = input.nextFloat();
+							
+							accounts.update(new CheckingAccount(number, branch, type, accountHolder, balance, limit));
+						}
+						
+						case 2 -> {
+							System.out.println(Colors.TEXT_WHITE + "\nInsira o novo aniversário da conta.");
+							anniversary = input.nextInt();
+							
+							accounts.update(new SavingsAccount(number, branch, type, accountHolder, balance, anniversary));
+						}
+						
+						default -> {
+							System.out.println(Colors.TEXT_WHITE + "\nTipo de conta inválido!");
+						}
+					}
+					
+				} else {
+					
+					System.out.println(Colors.TEXT_WHITE + "\nConta não encontrada!");
+				}
 				
 				keyPress();
                 break;
                 
 			case 5:
 				System.out.println(Colors.TEXT_WHITE + "\nApagar a Conta");
-				
+				System.out.println(Colors.TEXT_WHITE + "\nInsira o número da conta que deseja apagar.");
+				number = input.nextInt();
+					
+				accounts.delete(number);	
+					
 				keyPress();
                	break;
                	
