@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import account.util.Colors;
-
+import account.controller.AccountController;
 import account.model.CheckingAccount;
 import account.model.SavingsAccount;
 
@@ -14,24 +14,31 @@ public class Menu {
 	public static void main(String[] args) {
 		
 		Scanner input = new Scanner(System.in);
-		int option;
 		
-		//CheckingAccount class test
-		CheckingAccount checkingAccount1 = new CheckingAccount(2, 123, 1, "Mariana", 15000.0f, 1000.0f);
-		checkingAccount1.view();
-		checkingAccount1.withdraw(12000.0f);
-		checkingAccount1.view();
-		checkingAccount1.deposit(5000.0f);
-		checkingAccount1.view();
+		// case tests for AccountController
+		AccountController accounts = new AccountController();
 		
-		//SavingsAccount class test
-		SavingsAccount savingsAccount1 = new SavingsAccount(3, 123, 2, "Victor", 100000.0f, 15);
-		savingsAccount1.view();
-		savingsAccount1.withdraw(1000.0f);
-		savingsAccount1.view();
-		savingsAccount1.deposit(5000.0f);
-		savingsAccount1.view();
-
+		System.out.println("\nCriar Contas\n");
+		
+		CheckingAccount checkingAccount1 = new CheckingAccount(accounts.generateNumber(), 123, 1, "João da Silva", 1000f, 100.0f);
+		accounts.create(checkingAccount1);
+			
+		CheckingAccount checkingAccount2 = new CheckingAccount(accounts.generateNumber(), 124, 1, "Maria da Silva", 2000f, 100.0f);
+		accounts.create(checkingAccount2);
+		
+		SavingsAccount savingsAccount1 = new SavingsAccount(accounts.generateNumber(), 125, 2, "Mariana dos Santos", 4000f, 12);
+		accounts.create(savingsAccount1);
+		
+		SavingsAccount savingsAccount2 = new SavingsAccount(accounts.generateNumber(), 125, 2, "Juliana Ramos", 8000f, 15);
+		accounts.create(savingsAccount2);
+		
+		accounts.listAll();
+		
+		// input variables
+		int option, number, branch, type, anniversary;
+		String accountHolder;
+		float balance, limit;
+		
 		
 		while (true) {
 			System.out.println(Colors.TEXT_YELLOW + Colors.ANSI_BLACK_BACKGROUND
@@ -78,11 +85,43 @@ public class Menu {
 			case 1:
 				System.out.println(Colors.TEXT_WHITE + "\nCriar Conta");
 				
+				System.out.println("Digite o Numero da Agência: ");
+				branch = input.nextInt();
+				
+				System.out.println("Digite o Nome do titular da conta: ");
+				input.skip("\\R?");
+				accountHolder = input.nextLine();
+				
+				do {
+					
+					System.out.println("Digite o tipo da Conta (1-CC ou 2-CP): ");
+					type = input.nextInt();
+					
+				} while(type < 1 && type > 2);
+					
+				System.out.println("Digite o saldo da Conta (R$): ");
+				balance = input.nextFloat();
+				
+				switch(type) {
+				
+					case 1 -> {
+						System.out.println("Digite o Limite de Crédito (R$): ");
+						limit = input.nextFloat();
+						accounts.create(new CheckingAccount(accounts.generateNumber(), branch, type, accountHolder, balance, limit));
+					}
+					case 2 -> {
+						System.out.println("Digite o dia do Aniversario da Conta: ");
+						anniversary = input.nextInt();
+						accounts.create(new SavingsAccount(accounts.generateNumber(), branch, type, accountHolder, balance, anniversary));
+					}
+				}
+				
 				keyPress();
 				break;
 				
 			case 2:
 				System.out.println(Colors.TEXT_WHITE + "\nListar todas as Contas");
+				accounts.listAll();
 				
 				keyPress();
                 break;
