@@ -1,9 +1,10 @@
 package account;
 
+import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import account.util.Colors;
-
-import account.model.Account;
+import account.controller.AccountController;
 import account.model.CheckingAccount;
 import account.model.SavingsAccount;
 
@@ -13,24 +14,31 @@ public class Menu {
 	public static void main(String[] args) {
 		
 		Scanner input = new Scanner(System.in);
-		int option;
 		
-		//CheckingAccount class test
-		CheckingAccount checkingAccount1 = new CheckingAccount(2, 123, 1, "Mariana", 15000.0f, 1000.0f);
-		checkingAccount1.view();
-		checkingAccount1.withdraw(12000.0f);
-		checkingAccount1.view();
-		checkingAccount1.deposit(5000.0f);
-		checkingAccount1.view();
+		// case tests for AccountController
+		AccountController accounts = new AccountController();
 		
-		//SavingsAccount class test
-		SavingsAccount savingsAccount1 = new SavingsAccount(3, 123, 2, "Victor", 100000.0f, 15);
-		savingsAccount1.view();
-		savingsAccount1.withdraw(1000.0f);
-		savingsAccount1.view();
-		savingsAccount1.deposit(5000.0f);
-		savingsAccount1.view();
-
+		System.out.println("\nCriar Contas\n");
+		
+		CheckingAccount checkingAccount1 = new CheckingAccount(accounts.generateNumber(), 123, 1, "João da Silva", 1000f, 100.0f);
+		accounts.create(checkingAccount1);
+			
+		CheckingAccount checkingAccount2 = new CheckingAccount(accounts.generateNumber(), 124, 1, "Maria da Silva", 2000f, 100.0f);
+		accounts.create(checkingAccount2);
+		
+		SavingsAccount savingsAccount1 = new SavingsAccount(accounts.generateNumber(), 125, 2, "Mariana dos Santos", 4000f, 12);
+		accounts.create(savingsAccount1);
+		
+		SavingsAccount savingsAccount2 = new SavingsAccount(accounts.generateNumber(), 125, 2, "Juliana Ramos", 8000f, 15);
+		accounts.create(savingsAccount2);
+		
+		accounts.listAll();
+		
+		// input variables
+		int option, number, branch, type, anniversary;
+		String accountHolder;
+		float balance, limit;
+		
 		
 		while (true) {
 			System.out.println(Colors.TEXT_YELLOW + Colors.ANSI_BLACK_BACKGROUND
@@ -53,50 +61,119 @@ public class Menu {
 			System.out.println("*****************************************************");
 			System.out.println("Entre com a opção desejada:                          ");
 			System.out.println("                                                     " + Colors.TEXT_RESET);
-
-			option = input.nextInt();
+		
+			
+			try {
+				option = input.nextInt();
+				
+			} catch(InputMismatchException e) {
+				
+				System.out.println(Colors.TEXT_RED_BOLD + "\nDigite números inteiros!\n" + Colors.TEXT_RESET);
+				input.nextLine();
+				
+				// in the cookbook, there was no call for keyPress() or continue, 
+				// it just assigned 0 to option (option = 0).
+				// I chose to call keyPress() and continue to the next iteration of while,
+				// to avoid the processing of the switch case and its triggering of default.
+				keyPress();
+				continue;
+				
+			}
+			
 			
 			switch (option) {
 			case 1:
-				System.out.println(Colors.TEXT_WHITE + "Criar Conta\n\n");
-			
-                		break;
+				System.out.println(Colors.TEXT_WHITE + "\nCriar Conta");
+				
+				System.out.println("Digite o Numero da Agência: ");
+				branch = input.nextInt();
+				
+				System.out.println("Digite o Nome do titular da conta: ");
+				input.skip("\\R?");
+				accountHolder = input.nextLine();
+				
+				do {
+					
+					System.out.println("Digite o tipo da Conta (1-CC ou 2-CP): ");
+					type = input.nextInt();
+					
+				} while(type < 1 && type > 2);
+					
+				System.out.println("Digite o saldo da Conta (R$): ");
+				balance = input.nextFloat();
+				
+				switch(type) {
+				
+					case 1 -> {
+						System.out.println("Digite o Limite de Crédito (R$): ");
+						limit = input.nextFloat();
+						accounts.create(new CheckingAccount(accounts.generateNumber(), branch, type, accountHolder, balance, limit));
+					}
+					case 2 -> {
+						System.out.println("Digite o dia do Aniversario da Conta: ");
+						anniversary = input.nextInt();
+						accounts.create(new SavingsAccount(accounts.generateNumber(), branch, type, accountHolder, balance, anniversary));
+					}
+				}
+				
+				keyPress();
+				break;
+				
 			case 2:
-				System.out.println(Colors.TEXT_WHITE + "Listar todas as Contas\n\n");
+				System.out.println(Colors.TEXT_WHITE + "\nListar todas as Contas");
+				accounts.listAll();
 				
-                		break;
+				keyPress();
+                break;
+                
 			case 3:
-				System.out.println(Colors.TEXT_WHITE + "Consultar dados da Conta - por número\n\n");
-
-                		break;
+				System.out.println(Colors.TEXT_WHITE + "\nConsultar dados da Conta - por número");
+				
+				keyPress();
+                break;
+                
 			case 4:
-				System.out.println(Colors.TEXT_WHITE + "Atualizar dados da Conta\n\n");
+				System.out.println(Colors.TEXT_WHITE + "\nAtualizar dados da Conta");
 				
-                		break;
+				keyPress();
+                break;
+                
 			case 5:
-				System.out.println(Colors.TEXT_WHITE + "Apagar a Conta\n\n");
-	
-               	 	break;
-			case 6:
-				System.out.println(Colors.TEXT_WHITE + "Saque\n\n");
-
-               	 	break;
-			case 7:
-				System.out.println(Colors.TEXT_WHITE + "Depósito\n\n");
+				System.out.println(Colors.TEXT_WHITE + "\nApagar a Conta");
 				
-                		break;
+				keyPress();
+               	break;
+               	
+			case 6:
+				System.out.println(Colors.TEXT_WHITE + "\nSaque");
+				
+				keyPress();
+               	break;
+               	
+			case 7:
+				System.out.println(Colors.TEXT_WHITE + "\nDepósito");
+				
+				keyPress();
+                break;
+                
 			case 8:
-				System.out.println(Colors.TEXT_WHITE + "Transferência entre Contas\n\n");
+				System.out.println(Colors.TEXT_WHITE + "\nTransferência entre Contas");
+				
+				keyPress();
+				break;
 				
 			case 9:
 				System.out.println(Colors.TEXT_WHITE_BOLD + "\nBanco do Brazil com Z - O seu Futuro começa aqui!");
 				about();
 				input.close();
 				System.exit(0);
+				
 				break;
 				
 			default:
 				System.out.println(Colors.TEXT_RED_BOLD + "\nOpção Inválida!\n" + Colors.TEXT_RESET);
+				
+				keyPress();
 				break;
 			}
 		}
@@ -104,10 +181,25 @@ public class Menu {
 	
 	
 	public static void about() {
+		
 		System.out.println("\n*********************************************************");
 		System.out.println("Projeto Desenvolvido por: ");
 		System.out.println("Helena Cristina Souto Fonseca - helenacsfonseca@hotmail.com");
 		System.out.println("https://github.com/NotofTroy");
 		System.out.println("*********************************************************");
+	}
+	
+	
+	public static void keyPress() {
+
+		try {
+
+			System.out.println(Colors.TEXT_RESET + "\nPressione Enter para Continuar.");
+			System.in.read();
+
+		} catch (IOException e) {
+
+			System.out.println(Colors.TEXT_RED_BOLD + "\nPressione somente enter" + Colors.TEXT_RESET);
+		}
 	}
 }
