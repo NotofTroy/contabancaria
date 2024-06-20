@@ -35,9 +35,9 @@ public class Menu {
 		accounts.listAll();
 		
 		// input variables
-		int option, number, branch, type, anniversary;
+		int option, number, branch, type, anniversary, destinationNumber;
 		String accountHolder;
-		float balance, limit;
+		float balance, limit, value;
 		
 		
 		while (true) {
@@ -198,18 +198,51 @@ public class Menu {
                	
 			case 6:
 				System.out.println(Colors.TEXT_WHITE + "\nSaque");
+				System.out.println(Colors.TEXT_WHITE + "\nInsira o número da conta de onde deseja sacar .");
+				number = input.nextInt();
+				
+				do {
+					System.out.println(Colors.TEXT_WHITE + "\nInsira o valor do saque (R$).");
+					value = input.nextFloat();
+					
+				} while (value <= 0);
+				
+				accounts.withdraw(number, value);
 				
 				keyPress();
                	break;
                	
 			case 7:
 				System.out.println(Colors.TEXT_WHITE + "\nDepósito");
+				System.out.println(Colors.TEXT_WHITE + "\nInsira o número da conta de onde deseja depositar.");
+				number = input.nextInt();
+				
+				do {
+					System.out.println(Colors.TEXT_WHITE + "\nInsira o valor do depósito (R$).");
+					value = input.nextFloat();
+					
+				} while (value <= 0);
+				
+				accounts.deposit(number, value);
 				
 				keyPress();
                 break;
                 
 			case 8:
 				System.out.println(Colors.TEXT_WHITE + "\nTransferência entre Contas");
+				System.out.println(Colors.TEXT_WHITE + "\nInsira o número da conta de origem.");
+				number = input.nextInt();
+				
+				System.out.println(Colors.TEXT_WHITE + "\nInsira o número da conta de destino.");
+				destinationNumber = input.nextInt();
+				
+				do {
+					System.out.println(Colors.TEXT_WHITE + "\nInsira o valor da transferência (R$).");
+					value = input.nextFloat();
+					
+				} while (value <= 0);
+				
+				accounts.transfer(number, destinationNumber, value);
 				
 				keyPress();
 				break;
